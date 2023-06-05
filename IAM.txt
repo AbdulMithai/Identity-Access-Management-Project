@@ -1,0 +1,27 @@
+Create user pools.
+Register an app client. 
+Add a list of employees in the User pool. 
+
+Username			Password	Group
+
+upgrad_admin1@example.com	Password123@	admin
+upgrad_eng1@example.com		Password123@	eng
+upgrad_eng2@example.com		Password123@	eng
+upgrad_devops1@example.com	Password123@	devops
+upgrad_it1@gmail.com		Password123@	it
+
+ 
+
+ Create groups and assign respective groups to employees. 
+
+Name	Description	Precedence
+
+admin	Admin		5
+devops	DevOps		20
+eng	Development	25
+it	IT		10
+
+ Integrate the Voting server and Voting client with Amazon Cognito using OIDC.
+ Run the app
+  
+       

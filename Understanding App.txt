@@ -1,0 +1,93 @@
+The application is divided into 2 parts.
+
+    Client: used only for voting on a topic (encryption and voting logic implemented directly through here)
+
+    Server: contains the majority of the functionalities/APIs
+
+    Dashboard: this is the home screen of the application.
+
+    Login: using this option, you can log in into the application.
+
+    Topics: this option allows you to create topics. Create different options for the topics. This option also lets you set up a time interval within which the users can vote.
+
+ 
+Code:
+
+ 
+
+Since our app client (the application) needs to verify the identity of the end-user and to get their basic profile information, you will use Flask-OIDC to add OpenID Connect-based authentication to our application. The github repo for the same can be found here. The OIDC object is instantiated in config.py in the server directory.
+
+ 
+
+Next, let’s walk through the important files that make up the project.
+
+ 
+
+Client:
+
+ 
+
+App.py
+
+ 
+
+In this file, if the user is already logged in, you use the instantiated OIDC object to get the email id and app path of the server. However, if the user has not logged in, you first ask the user to log in. The dashboard function uses user_getinfo() to get the information about the currently logged-in user. The app generates ‘key.txt’ to ensure the anonymity of the user while they are voting. A client is important because the encryption and voting logic takes place within the client itself. The voting token is double encapsulated to ensure that no one, including the server, knows who voted which option because the server does not store any user information. However, the users can verify their vote using the key that is generated in the ‘key.txt’. The ‘Setup_keys’ function generates the key in the system of the users in case no keys have been generated. If the keys have been generated, the server uses this ‘key value’ from the ‘key.txt’ to ensure that the vote is legitimate. 
+
+ 
+
+In the vote function, the key is read from the user system. If there is no key, a new key is created. Vote token, which is a key signed using hmac, is created. Various types of information, such as topic id, option id, vote token, time of voting, and so on, are added to the payload. The client fetches the id token, creates the access token from the id token and submits to the server with the vote token (The JWT that contains the payload and the access token as the secret). 
+
+ 
+
+Server:
+
+ 
+
+Vote.py
+
+ 
+
+The server receives the JWT token. This token uses the same user-owned access token signature that the server validates using the secret key. The access token is also verified because it is used to login into the server. The information in the JWT is decoded and inserted into the database. Consider the database as a black box, as you are more focused on the cybersecurity aspect of the project. Some of the relation (table) names and their descriptions in the ztev database that you created are as follows:
+
+ 
+
+    Mapper: this table stores the information about who is voting on what topics so that no one can resubmit.
+
+    Role_grants: this table stores the information about the roles to which you grant the permission to manage your topics.
+
+    Topic_options: topic options are stored in this table.
+
+    Topics: topic details are stored in this table.
+
+    Vote_invites: the roles that are invited to vote are listed in this table.
+
+    Votes: this table is used to store the votes.
+
+ 
+
+To understand the schema in detail involves the use of the docker CLI/windows powershell/cmd.
+
+    Run ‘docker exec -it ztev-postgres bash’.
+    Run ‘psql -h localhost -U postgres’.
+    Run ‘\l’ to get a list of databases.
+    Run ‘\c ztev’ to connect to the ztev database.
+    Run ‘\dt’ to get the list of tables in ztev.
+    Run ‘\d <table name>’ to get the table structure.
+
+ 
+
+Topic.py
+
+This file handles adding, editing and deleting topics.
+
+ 
+
+Option.py
+
+This file lets the user get, add, edit and delete the options created for the topics.
+
+ 
+
+Invite.py
+
+This file lets the user get, add, edit and delete the invites. Inviting essentially refers to inviting a role to vote.

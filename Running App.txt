@@ -1,0 +1,27 @@
+The most exciting part of the project is to run the application. So, open the Docker window and run the following command: 
+
+ 
+
+docker run -i --name ztev-postgres -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_DB=ztev -p 5432:5432 --rm postgres
+
+ 
+
+Let’s breakdown the command to understand it better.
+
+ 
+
+‘Docker run’ starts the container.
+
+‘-i’ refers to interactive mode.
+
+‘--name’ gives a name to the container.
+
+‘-e’ is an environment variable that you are passing. For example, here, the password is being provided and the database that needs to be initialised is being specified.
+
+‘-p’ refers to port mapping, which specifies the container port that you want to map to your host.
+
+‘--rm’ ensures that the container is deleted on pressing ‘ctrl + c’.
+
+ 
+
+Open two terminals, one for the client and one for the server. Navigate inside the client and the server directories of both the terminals. Run ‘app.py’ in both the terminals.

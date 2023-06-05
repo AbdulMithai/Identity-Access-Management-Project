@@ -1,0 +1,16 @@
+First things first.
+
+ 
+
+This application requires authentication, authorisation and user management. This sounds complicated and would probably take a lot of time to build from scratch. However, there is a way around this challenge. AWS Cognito service makes it easy to add the functionalities of authentication, authorisation and user management on this app. So, let’s head over to AWS Cognito.
+
+ 
+
+First, let's get started with the 'user management’ part. You want your user to log in into the voting application. So, head to the ‘User Pools’ option in Cognito and create a new user pool.
+
+ 
+
+Now that you have created a ‘User Pool’, you will want the app client, which, in this case, is our voting application, to access this newly created user pool. So, head to the ‘User Pools’ option in Cognito again and create a new app client.
+
+
+Next, you should integrate the Voting server and the Voting client with Amazon Cognito using OIDC. Here, Flask-OIDC is being used to add OpenID Connect-based authentication to our application. Now, head over to the ‘server’ folder in the ztev directory. Create a new file and name it ‘client_sercrets.json’. Fill this file  with the details obtained from the AWS Cognito. Refer to the ‘client_secrets.json.example’ file provided to you to understand how the configuration file should look like. Repeat the same for the client. 
